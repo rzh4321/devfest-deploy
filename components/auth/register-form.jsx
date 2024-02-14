@@ -56,11 +56,7 @@ export const RegisterForm = () => {
           });
           // router.push('/home');
         } catch (err) {
-          if (err.message.includes("Username already taken")) {
             setError('Username already taken');
-          } else {
-            setError('A server error occurred: ', err.message);
-          }
         }
       }
       create();
