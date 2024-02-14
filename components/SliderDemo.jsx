@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils"
-import { Slider } from "@/components/ui/slider"
+import { cn } from "@/lib/utils";
+import { Slider } from "@/components/ui/slider";
 import { useState, useEffect } from "react";
 import { updateSlider, getSlider } from "@/actions/actions";
 import { FaSpinner } from "react-icons/fa";
@@ -25,9 +25,8 @@ export default function SliderDemo({ className, ...props }) {
     getSliderValue();
   }, []);
   if (isDefault) {
-    return <FaSpinner className='animate-spin m-auto' />
+    return <FaSpinner className="animate-spin m-auto" />;
   }
-
 
   return (
     <div className="flex flex-col w-full mr-8">
@@ -41,12 +40,14 @@ export default function SliderDemo({ className, ...props }) {
         step={10}
         className={cn("w-[100%] grow-1", className)}
         {...props}
-        onValueChange={(value) => {handleChange(value)}}
+        onValueChange={(value) => {
+          handleChange(value);
+        }}
       />
       <div className="flex justify-between w-[100%]  text-sm">
         <div>Left</div>
         <div>Right</div>
       </div>
     </div>
-  )
+  );
 }

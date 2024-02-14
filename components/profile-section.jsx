@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import EditProfile from './edit-profile';
+import EditProfile from "./edit-profile";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import Image from "next/image";
@@ -17,16 +17,21 @@ export default function ProfileSection({ edit, stringData }) {
   const [followsYou, setFollowsYou] = useState(null);
   const { toast } = useToast();
 
-
   useEffect(() => {
     if (userData === undefined || Object.keys(userData).length === 0) {
       getUserData(JSON.parse(stringData));
     }
-      setIsFollowing(userData.followers?.some(
-        (obj) => obj._id.toString() === session?.user.userId));
-    setFollowsYou(userData.following?.some(obj => obj._id.toString() === session?.user.userId));
+    setIsFollowing(
+      userData.followers?.some(
+        (obj) => obj._id.toString() === session?.user.userId,
+      ),
+    );
+    setFollowsYou(
+      userData.following?.some(
+        (obj) => obj._id.toString() === session?.user.userId,
+      ),
+    );
   }, [stringData, userData, session]);
-
 
   async function changeIsFollowing(bool) {
     try {
@@ -37,18 +42,16 @@ export default function ProfileSection({ edit, stringData }) {
       } else {
         setIsFollowing(false);
       }
-
-    }
-    catch (err) {
+    } catch (err) {
       toast({
         variant: "destructive",
         title: "Something went wrong",
         description: err.message,
-      })
+      });
     }
   }
 
-  if (status === 'loading') return <Loader className="m-auto animate-spin" />
+  if (status === "loading") return <Loader className="m-auto animate-spin" />;
 
   return (
     <div className="flex justify-between items-center px-5 max-w-2xl w-full m-auto my-6">
@@ -60,7 +63,7 @@ export default function ProfileSection({ edit, stringData }) {
                 ? userData.profilePicUrl
                 : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzykHG9uAxSMQWR-w0PL11LVzi2WD9IcXruJNMu0WMWQ&s"
             }
-            alt='profile'
+            alt="profile"
             className="rounded-full"
             fill
           />
@@ -71,13 +74,25 @@ export default function ProfileSection({ edit, stringData }) {
         </div>
       </div>
       <div className="self-center flex flex-col gap-2">
-        {edit ? <EditProfile /> : isFollowing ? (
-          <Button variant="destructive" className="self-end" onClick={() => changeIsFollowing(false)}>Unfollow</Button>
-        ) : <Button className="self-end" onClick={() => changeIsFollowing(true)}>Follow</Button>}
-        {followsYou && <FormSuccess message={`${userData.username} is following you`} />}
-
+        {edit ? (
+          <EditProfile />
+        ) : isFollowing ? (
+          <Button
+            variant="destructive"
+            className="self-end"
+            onClick={() => changeIsFollowing(false)}
+          >
+            Unfollow
+          </Button>
+        ) : (
+          <Button className="self-end" onClick={() => changeIsFollowing(true)}>
+            Follow
+          </Button>
+        )}
+        {followsYou && (
+          <FormSuccess message={`${userData.username} is following you`} />
+        )}
       </div>
-      
     </div>
   );
 }

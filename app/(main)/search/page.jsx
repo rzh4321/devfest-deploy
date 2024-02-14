@@ -28,7 +28,10 @@ export default async function Search({ searchParams }) {
   const users = await getUsersFromFilter(searchParams.filter, userId);
   return (
     <>
-        <FriendList users={users} heading={`Results for "${searchParams.filter}"`} />
+      <FriendList
+        users={users}
+        heading={`Results for "${searchParams.filter}"`}
+      />
     </>
   );
 }

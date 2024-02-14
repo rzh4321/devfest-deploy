@@ -1,4 +1,4 @@
-'use server';
+"use server";
 import User from "@/models/User";
 import Post from "@/models/Post";
 import Comment from "@/models/Comment";
@@ -9,10 +9,10 @@ import bcrypt from "bcryptjs";
 import { RegisterSchema, formSchema } from "@/schemas";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/authOptions";
-import { updateProfileSchema } from '@/schemas'
+import { updateProfileSchema } from "@/schemas";
 
-Comment
-Like
+Comment;
+Like;
 
 export async function getSlider() {
   await connectToDB();
@@ -30,8 +30,7 @@ export async function updateSlider(newSlider) {
     const user = await User.findByIdAndUpdate(userId, {
       slider: newSlider,
     });
-  }
-  catch(err) {
+  } catch (err) {
     throw new Error(err);
   }
 }
@@ -45,7 +44,7 @@ export async function createUser(userDetails) {
 
     const user = await User.findOne({ username: username });
     if (user) {
-      throw new Error('Username already taken');
+      throw new Error("Username already taken");
     }
     // username available, save user to db
     const hashedPassword = bcrypt.hashSync(password, 10);
@@ -61,12 +60,9 @@ export async function createUser(userDetails) {
     } catch (err) {
       throw new Error(`Unable to create new user: ${err}`);
     }
+  } else {
+    throw new Error("Something went wrong");
   }
-  else {
-    throw new Error('Something went wrong');
-  }
-
-
 }
 
 export async function getProfileUrl(userId) {
@@ -81,7 +77,7 @@ export async function getProfileUrl(userId) {
       return null;
     }
   } catch (error) {
-    console.error('Error fetching user profile URL:', error);
+    console.error("Error fetching user profile URL:", error);
     throw error;
   }
 }
@@ -109,36 +105,40 @@ export async function getHomePosts(userId, startId) {
             path: "user",
           },
         });
-      
 
-        // Determine thresholds or acceptance criteria based on the slider value
-        let acceptableRange;
-        if (slider < 20) {   // Seeking very liberal content
-            acceptableRange = [0, 1];
-        } else if (slider < 40) { // Seeking liberal content
-            acceptableRange = [0, 2];
-        } else if (slider < 60) { // Seeking neutral content
-            acceptableRange = [1, 3];
-        } else if (slider < 80) { // Seeking conservative content
-            acceptableRange = [2, 4];
-        } else {             // Seeking very conservative content
-            acceptableRange = [3, 4];
-        }
+      // Determine thresholds or acceptance criteria based on the slider value
+      let acceptableRange;
+      if (slider < 20) {
+        // Seeking very liberal content
+        acceptableRange = [0, 1];
+      } else if (slider < 40) {
+        // Seeking liberal content
+        acceptableRange = [0, 2];
+      } else if (slider < 60) {
+        // Seeking neutral content
+        acceptableRange = [1, 3];
+      } else if (slider < 80) {
+        // Seeking conservative content
+        acceptableRange = [2, 4];
+      } else {
+        // Seeking very conservative content
+        acceptableRange = [3, 4];
+      }
 
-        // Filter the array based on the threshold, preserving the original order
-        const filteredArray = posts.filter(obj => 
-            obj.rating >= acceptableRange[0] && obj.rating <= acceptableRange[1]
-        );
+      // Filter the array based on the threshold, preserving the original order
+      const filteredArray = posts.filter(
+        (obj) =>
+          obj.rating >= acceptableRange[0] && obj.rating <= acceptableRange[1],
+      );
 
-        // Take the first 10 items from the filtered array
-        const top10Filtered = filteredArray.slice(0, 10);
+      // Take the first 10 items from the filtered array
+      const top10Filtered = filteredArray.slice(0, 10);
       return JSON.stringify(top10Filtered);
-    }
-    else {
+    } else {
       // user clicked on 'show more'. Theres a cursor
       const posts = await Post.find({ user: { $in: usersIds } })
         .where("_id")
-        .lt(startId)        // must be < cursor since cursor was included in prev batch
+        .lt(startId) // must be < cursor since cursor was included in prev batch
         .sort({ _id: -1 })
         .populate("user")
         .populate({
@@ -155,27 +155,33 @@ export async function getHomePosts(userId, startId) {
         });
       // Determine thresholds or acceptance criteria based on the slider value
       let acceptableRange;
-      if (slider < 20) {   // Seeking very liberal content
-          acceptableRange = [0, 1];
-      } else if (slider < 40) { // Seeking liberal content
-          acceptableRange = [0, 2];
-      } else if (slider < 60) { // Seeking neutral content
-          acceptableRange = [1, 3];
-      } else if (slider < 80) { // Seeking conservative content
-          acceptableRange = [2, 4];
-      } else {             // Seeking very conservative content
-          acceptableRange = [3, 4];
+      if (slider < 20) {
+        // Seeking very liberal content
+        acceptableRange = [0, 1];
+      } else if (slider < 40) {
+        // Seeking liberal content
+        acceptableRange = [0, 2];
+      } else if (slider < 60) {
+        // Seeking neutral content
+        acceptableRange = [1, 3];
+      } else if (slider < 80) {
+        // Seeking conservative content
+        acceptableRange = [2, 4];
+      } else {
+        // Seeking very conservative content
+        acceptableRange = [3, 4];
       }
 
       // Filter the array based on the threshold, preserving the original order
-      const filteredArray = posts.filter(obj => 
-          obj.rating >= acceptableRange[0] && obj.rating <= acceptableRange[1]
+      const filteredArray = posts.filter(
+        (obj) =>
+          obj.rating >= acceptableRange[0] && obj.rating <= acceptableRange[1],
       );
 
       // Take the first 10 items from the filtered array
       const top10Filtered = filteredArray.slice(0, 10);
 
-    return JSON.stringify(top10Filtered);
+      return JSON.stringify(top10Filtered);
     }
   } catch (err) {
     console.log(err);
@@ -183,12 +189,9 @@ export async function getHomePosts(userId, startId) {
   }
 }
 
-
-
 export async function getAllPosts(startId) {
   await connectToDB();
   const slider = await getSlider();
-
 
   if (startId) {
     try {
@@ -210,10 +213,7 @@ export async function getAllPosts(startId) {
           },
         });
 
-
       return JSON.stringify(posts);
-
-
     } catch (err) {
       throw new Error(err);
     }
@@ -235,33 +235,37 @@ export async function getAllPosts(startId) {
           },
         });
 
-        // posts is a giant array of posts objects that each has a rating
+      // posts is a giant array of posts objects that each has a rating
 
-        // Determine thresholds or acceptance criteria based on the slider value
-        let acceptableRange;
-        if (slider < 20) {   // Seeking very liberal content
-            acceptableRange = [0, 1];
-        } else if (slider < 40) { // Seeking liberal content
-            acceptableRange = [0, 2];
-        } else if (slider < 60) { // Seeking neutral content
-            acceptableRange = [1, 3];
-        } else if (slider < 80) { // Seeking conservative content
-            acceptableRange = [2, 4];
-        } else {             // Seeking very conservative content
-            acceptableRange = [3, 4];
-        }
+      // Determine thresholds or acceptance criteria based on the slider value
+      let acceptableRange;
+      if (slider < 20) {
+        // Seeking very liberal content
+        acceptableRange = [0, 1];
+      } else if (slider < 40) {
+        // Seeking liberal content
+        acceptableRange = [0, 2];
+      } else if (slider < 60) {
+        // Seeking neutral content
+        acceptableRange = [1, 3];
+      } else if (slider < 80) {
+        // Seeking conservative content
+        acceptableRange = [2, 4];
+      } else {
+        // Seeking very conservative content
+        acceptableRange = [3, 4];
+      }
 
-        // Filter the array based on the threshold, preserving the original order
-        const filteredArray = posts.filter(obj => 
-            obj.rating >= acceptableRange[0] && obj.rating <= acceptableRange[1]
-        );
+      // Filter the array based on the threshold, preserving the original order
+      const filteredArray = posts.filter(
+        (obj) =>
+          obj.rating >= acceptableRange[0] && obj.rating <= acceptableRange[1],
+      );
 
-        // Take the first 10 items from the filtered array
-        const top10Filtered = filteredArray.slice(0, 10);
+      // Take the first 10 items from the filtered array
+      const top10Filtered = filteredArray.slice(0, 10);
 
       return JSON.stringify(top10Filtered);
-        
-
     } catch (err) {
       throw new Error(err);
     }
@@ -271,9 +275,7 @@ export async function getAllPosts(startId) {
 export async function getUser(userId) {
   await connectToDB();
   try {
-    const user = await User.findById(userId).populate(
-      "followers following",
-    );
+    const user = await User.findById(userId).populate("followers following");
     if (!user) {
       throw new Error("cant find user");
     }
@@ -283,8 +285,8 @@ export async function getUser(userId) {
   }
 }
 
-const { exec } = require('child_process'); //added
-const util = require('util'); //added
+const { exec } = require("child_process"); //added
+const util = require("util"); //added
 const execAsync = util.promisify(exec); //added
 
 export async function createNewPost(values) {
@@ -294,8 +296,10 @@ export async function createNewPost(values) {
     const { content, image } = validatedFields.data;
 
     // get the rating from ML using content and/or image
-    const postsJson = JSON.stringify({ content: content, image: image })
-    const { stdout, stderr } = await execAsync(`echo '${postsJson}' | python3 post_processing/post_processor.py`);//added
+    const postsJson = JSON.stringify({ content: content, image: image });
+    const { stdout, stderr } = await execAsync(
+      `echo '${postsJson}' | python3 post_processing/post_processor.py`,
+    ); //added
 
     if (stderr) {
       console.error("Error executing Python script: ${ stderr }");
@@ -316,8 +320,6 @@ export async function createNewPost(values) {
         image,
         rating: processedJson.rating,
       });
-
-
 
       const currentUser = await User.findById(session?.user.userId);
 
@@ -342,18 +344,14 @@ export async function createNewPost(values) {
           },
         });
 
-
       return JSON.stringify(populatedPost); //commented out
-
-
     } catch (error) {
       // Handle potential errors
-      console.error('Error creating a new post:', error);
+      console.error("Error creating a new post:", error);
       throw error;
     }
-  }
-  else {
-    throw new Error('Something went wrong');
+  } else {
+    throw new Error("Something went wrong");
   }
 }
 
@@ -380,33 +378,38 @@ export async function getUserPosts(userId, startId) {
         });
       // Determine thresholds or acceptance criteria based on the slider value
       let acceptableRange;
-      if (slider < 20) {   // Seeking very liberal content
-          acceptableRange = [0, 1];
-      } else if (slider < 40) { // Seeking liberal content
-          acceptableRange = [0, 2];
-      } else if (slider < 60) { // Seeking neutral content
-          acceptableRange = [1, 3];
-      } else if (slider < 80) { // Seeking conservative content
-          acceptableRange = [2, 4];
-      } else {             // Seeking very conservative content
-          acceptableRange = [3, 4];
+      if (slider < 20) {
+        // Seeking very liberal content
+        acceptableRange = [0, 1];
+      } else if (slider < 40) {
+        // Seeking liberal content
+        acceptableRange = [0, 2];
+      } else if (slider < 60) {
+        // Seeking neutral content
+        acceptableRange = [1, 3];
+      } else if (slider < 80) {
+        // Seeking conservative content
+        acceptableRange = [2, 4];
+      } else {
+        // Seeking very conservative content
+        acceptableRange = [3, 4];
       }
 
       // Filter the array based on the threshold, preserving the original order
-      const filteredArray = posts.filter(obj => 
-          obj.rating >= acceptableRange[0] && obj.rating <= acceptableRange[1]
+      const filteredArray = posts.filter(
+        (obj) =>
+          obj.rating >= acceptableRange[0] && obj.rating <= acceptableRange[1],
       );
 
       // Take the first 10 items from the filtered array
       const top10Filtered = filteredArray.slice(0, 10);
 
-    return JSON.stringify(top10Filtered);
-    }
-    else {
+      return JSON.stringify(top10Filtered);
+    } else {
       // user clicked on 'show more'. Theres a cursor
       const posts = await Post.find({ user: currentUser._id })
         .where("_id")
-        .lt(startId)        // must be < cursor since cursor was included in prev batch
+        .lt(startId) // must be < cursor since cursor was included in prev batch
         .sort({ _id: -1 })
         .populate("user")
         .populate({
@@ -423,27 +426,33 @@ export async function getUserPosts(userId, startId) {
         });
       // Determine thresholds or acceptance criteria based on the slider value
       let acceptableRange;
-      if (slider < 20) {   // Seeking very liberal content
-          acceptableRange = [0, 1];
-      } else if (slider < 40) { // Seeking liberal content
-          acceptableRange = [0, 2];
-      } else if (slider < 60) { // Seeking neutral content
-          acceptableRange = [1, 3];
-      } else if (slider < 80) { // Seeking conservative content
-          acceptableRange = [2, 4];
-      } else {             // Seeking very conservative content
-          acceptableRange = [3, 4];
+      if (slider < 20) {
+        // Seeking very liberal content
+        acceptableRange = [0, 1];
+      } else if (slider < 40) {
+        // Seeking liberal content
+        acceptableRange = [0, 2];
+      } else if (slider < 60) {
+        // Seeking neutral content
+        acceptableRange = [1, 3];
+      } else if (slider < 80) {
+        // Seeking conservative content
+        acceptableRange = [2, 4];
+      } else {
+        // Seeking very conservative content
+        acceptableRange = [3, 4];
       }
 
       // Filter the array based on the threshold, preserving the original order
-      const filteredArray = posts.filter(obj => 
-          obj.rating >= acceptableRange[0] && obj.rating <= acceptableRange[1]
+      const filteredArray = posts.filter(
+        (obj) =>
+          obj.rating >= acceptableRange[0] && obj.rating <= acceptableRange[1],
       );
 
       // Take the first 10 items from the filtered array
       const top10Filtered = filteredArray.slice(0, 10);
 
-    return JSON.stringify(top10Filtered);
+      return JSON.stringify(top10Filtered);
     }
   } catch (err) {
     console.log(err);
@@ -472,8 +481,9 @@ export async function updateProfile(userDetails) {
       }
       // only url
       else {
-        const user = await User.findByIdAndUpdate(userId, { profilePicUrl: url });
-
+        const user = await User.findByIdAndUpdate(userId, {
+          profilePicUrl: url,
+        });
       }
     } catch (err) {
       throw new Error(err);
@@ -492,8 +502,7 @@ export async function changeFollowings(otherUserId, isFollowing) {
     if (isFollowing) {
       sessionUser.following.push(otherUser._id);
       otherUser.followers.push(sessionUser._id);
-    }
-    else {
+    } else {
       // user is no longer following otherUser
       sessionUser.following.splice(
         sessionUser.following.indexOf(otherUser._id, 1),
@@ -504,8 +513,7 @@ export async function changeFollowings(otherUserId, isFollowing) {
     }
     await sessionUser.save();
     await otherUser.save();
-  }
-  catch (err) {
+  } catch (err) {
     throw new Error(err);
   }
 }

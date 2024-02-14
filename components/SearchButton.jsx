@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
@@ -12,8 +12,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 
 import {
@@ -43,7 +43,7 @@ export default function SearchButton() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-      <Search className="h-8 w-8 cursor-pointer" />
+        <Search className="h-8 w-8 cursor-pointer" />
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -51,30 +51,30 @@ export default function SearchButton() {
           <Separator />
         </DialogHeader>
         <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(handleSearchSubmit)}
-              className="flex"
-            >
-              <FormField
-                control={form.control}
-                name="filter"
-                render={({ field }) => (
-                  <FormItem className='w-full'>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter name or username"
-                        {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <Button><Search /></Button>
-              <DialogClose asChild>
-                  <span ref={buttonRef}></span>
-              </DialogClose>
-            </form>
+          <form
+            onSubmit={form.handleSubmit(handleSearchSubmit)}
+            className="flex"
+          >
+            <FormField
+              control={form.control}
+              name="filter"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormControl>
+                    <Input placeholder="Enter name or username" {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <Button>
+              <Search />
+            </Button>
+            <DialogClose asChild>
+              <span ref={buttonRef}></span>
+            </DialogClose>
+          </form>
         </Form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

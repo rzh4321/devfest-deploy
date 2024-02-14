@@ -5,7 +5,10 @@ export default function Footer() {
   return (
     <footer className="flex flex-col gap-2 items-center content-center py-12">
       <div className="flex gap-3">
-        <Link href="https://github.com/fzinnah17/columbia-devfest24" target="_blank">
+        <Link
+          href="https://github.com/fzinnah17/columbia-devfest24"
+          target="_blank"
+        >
           <Github />
         </Link>
       </div>
@@ -22,7 +25,6 @@ export default function Footer() {
         </small>
       </div>
       <p className="footer-bottom-text">© 2024 DevFest</p>
-
     </footer>
   );
 }

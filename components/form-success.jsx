@@ -1,9 +1,6 @@
 import { CheckCircledIcon } from "@radix-ui/react-icons";
 
-
-export const FormSuccess = ({
-  message,
-}) => {
+export const FormSuccess = ({ message }) => {
   if (!message) return null;
 
   return (

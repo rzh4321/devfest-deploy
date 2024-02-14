@@ -29,8 +29,6 @@ import { FileUpload } from "./file-upload";
 import { updateProfileSchema } from "@/schemas";
 import { updateProfile } from "@/actions/actions";
 
-
-
 const EditProfile = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -45,10 +43,10 @@ const EditProfile = () => {
   const handleSubmit = async (values) => {
     setIsSubmitting(true);
     try {
-        await updateProfile(values);
-        location.reload();     // refresh profile page after updating
+      await updateProfile(values);
+      location.reload(); // refresh profile page after updating
     } catch (err) {
-        setError(err);
+      setError(err);
     }
   };
 
@@ -97,12 +95,12 @@ const EditProfile = () => {
                   <FormItem>
                     <FormLabel htmlFor="url">Profile image</FormLabel>
                     <FormControl>
-                        <FileUpload
-                          value={field.value}
-                          onChange={field.onChange}
-                          endpoint={'authorizedImage'}
-                        />
-                      </FormControl>
+                      <FileUpload
+                        value={field.value}
+                        onChange={field.onChange}
+                        endpoint={"authorizedImage"}
+                      />
+                    </FormControl>
                   </FormItem>
                 )}
               />
@@ -112,7 +110,8 @@ const EditProfile = () => {
                   <Button
                     disabled={
                       isSubmitting ||
-                      (!form.getValues().name.trim() && !form.getValues().url.trim())
+                      (!form.getValues().name.trim() &&
+                        !form.getValues().url.trim())
                     }
                     className="mt-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 dark:bg-blue-400 hover:bg-blue-700 dark:hover:bg-blue-500 focus:outline-none"
                     type="submit"

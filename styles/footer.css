@@ -3,11 +3,11 @@
 }
 
 .iconItem {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px; /* Adjust the space between icons */
-    margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px; /* Adjust the space between icons */
+  margin-bottom: 1rem;
 }
 
 .logo {

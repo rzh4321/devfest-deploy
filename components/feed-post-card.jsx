@@ -7,14 +7,14 @@ import { postTimeStampDisplay } from "@/lib/utils";
 // import DeletePostIcon from "./DeletePostIcon";
 
 const PostCard = ({ post, user }) => {
-//   const [postComments, setPostComments] = useState([]);
+  //   const [postComments, setPostComments] = useState([]);
 
-//   useEffect(() => {
-//     // get initial comments on this post
-//     const comments = post.comments;
-//     comments.reverse(); // reverse to get most recent comments first
-//     setPostComments(comments);
-//   }, []);
+  //   useEffect(() => {
+  //     // get initial comments on this post
+  //     const comments = post.comments;
+  //     comments.reverse(); // reverse to get most recent comments first
+  //     setPostComments(comments);
+  //   }, []);
   const parsedUser = JSON.parse(user);
   return (
     <div className="bg-white dark:bg-gray-800 p-5 rounded-md shadow-md flex flex-col gap-4 max-w-2xl w-full">
@@ -22,8 +22,7 @@ const PostCard = ({ post, user }) => {
         <div className="flex space-x-3">
           <Link
             href={
-              post.user._id ===
-              parsedUser._id
+              post.user._id === parsedUser._id
                 ? "/profile"
                 : `/users/${post.user._id}`
             }
@@ -44,8 +43,7 @@ const PostCard = ({ post, user }) => {
             <div className="font-bold text-base">
               <Link
                 href={
-                  post.user._id.toString() ===
-                  JSON.parse(user)._id.toString()
+                  post.user._id.toString() === JSON.parse(user)._id.toString()
                     ? "/profile"
                     : `/users/${post.user._id}`
                 }
@@ -68,7 +66,15 @@ const PostCard = ({ post, user }) => {
       <div className="mt-3 text-base text-gray-700 dark:text-gray-300 break-all">
         {post.content}
       </div>
-      {post.image && <Image alt='post image' className="w-full !max-h-[300px] rounded-sm" src={post.image} height={300} width={'300'} />}
+      {post.image && (
+        <Image
+          alt="post image"
+          className="w-full !max-h-[300px] rounded-sm"
+          src={post.image}
+          height={300}
+          width={"300"}
+        />
+      )}
       {/* <Comments
         postId={post._id}
         postComments={postComments}

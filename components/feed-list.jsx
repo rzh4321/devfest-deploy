@@ -1,7 +1,7 @@
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import PostCard from './feed-post-card';
-import NewPostCard from './new-post-card';
+import PostCard from "./feed-post-card";
+import NewPostCard from "./new-post-card";
 import { getHomePosts, getUserPosts, getAllPosts } from "@/actions/actions";
 import { Button } from "./ui/button";
 
@@ -16,7 +16,7 @@ export default function FeedList({
   const { data: session } = useSession();
   const [morePostsLoading, setMorePostsLoading] = useState(false);
   const [newEndOfFeed, setNewEndOfFeed] = useState(false);
-    const parsedPosts = (typeof posts === 'string') ? JSON.parse(posts) : posts;
+  const parsedPosts = typeof posts === "string" ? JSON.parse(posts) : posts;
 
   // Fetch 10 of all posts startig from the last post id in the posts array
   const fetchMorePostsFromLastId = async () => {
@@ -52,44 +52,33 @@ export default function FeedList({
     return null;
   }
   const allPosts = parsedPosts.map((postObj) => (
-    <PostCard
-      key={postObj._id}
-      post={postObj}
-      user={authuserData}
-    />
+    <PostCard key={postObj._id} post={postObj} user={authuserData} />
   ));
 
-    return (
+  return (
     <div className="flex flex-col gap-6 items-center px-5">
-
-
-        {feedType !== "user" && <NewPostCard user={JSON.parse(authuserData)} />}
-        <div className="text-3xl max-w-2xl relative w-full">
+      {feedType !== "user" && <NewPostCard user={JSON.parse(authuserData)} />}
+      <div className="text-3xl max-w-2xl relative w-full">
         {feedType === "user"
           ? `${JSON.parse(authuserData).username}'s posts`
           : feedType === "profile"
-          ? "Your posts"
-          : feedType === 'home'
-          ? "Your feed" : "All posts"}
+            ? "Your posts"
+            : feedType === "home"
+              ? "Your feed"
+              : "All posts"}
       </div>
-        <div className="flex flex-col gap-10 items-center py-1 max-w-2xl w-full">
+      <div className="flex flex-col gap-10 items-center py-1 max-w-2xl w-full">
         {allPosts.length === 0 ? <>No posts yet...</> : <>{allPosts}</>}
       </div>
-        {!newEndOfFeed && !endOfFeed ? (
-          <div className="d-flex justify-content-center">
-            {morePostsLoading ? (
-              null
-            ) : (
-              <Button
-                onClick={fetchMorePostsFromLastId}
-              >
-                Load posts
-              </Button>
-            )}
-          </div>
-        ) : (
-          ""
-        )}
-      </div>
-    );
+      {!newEndOfFeed && !endOfFeed ? (
+        <div className="d-flex justify-content-center">
+          {morePostsLoading ? null : (
+            <Button onClick={fetchMorePostsFromLastId}>Load posts</Button>
+          )}
+        </div>
+      ) : (
+        ""
+      )}
+    </div>
+  );
 }

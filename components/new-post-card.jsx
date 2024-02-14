@@ -6,6 +6,9 @@ import { createNewPost } from "@/actions/actions";
 import { useRouter } from "next/navigation";
 import { FileUpload } from "./file-upload";
 import { useRef } from "react";
+import { useToast } from "@/components/ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -26,7 +29,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogClose
+  DialogClose,
 } from "@/components/ui/dialog";
 import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
@@ -34,8 +37,10 @@ import Image from "next/image";
 import { formSchema } from "@/schemas";
 
 const NewPostCard = ({ user }) => {
-    const router = useRouter();
-    const ref = useRef();
+  const { toast } = useToast();
+
+  const router = useRouter();
+  const ref = useRef();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -47,11 +52,26 @@ const NewPostCard = ({ user }) => {
 
   const handleSubmit = async (values) => {
     setIsSubmitting(true);
-    await createNewPost(values);
-    router.refresh();
-    form.reset();
-    setIsSubmitting(false);
-    ref.current.click();  // need to manually close dialog after submit
+    toast({
+      variant: "destructive",
+      title: "Unsupported Action",
+      description:
+        "Creating posts is currently unsupported in the deployed version due to constraints related to the size of the machine learning model.",
+      action: (
+        <ToastAction altText="Try again">
+          <Link
+            target="_blank"
+            href="https://github.com/fzinnah17/columbia-devfest24/blob/main/README.md"
+          >
+            Details
+          </Link>
+        </ToastAction>
+      ),
+    });
+    // const st = await createNewPost(values);
+    // router.refresh();
+    // form.reset();
+    // ref.current.click();  // need to manually close dialog after submit
   };
 
   return (
@@ -101,34 +121,34 @@ const NewPostCard = ({ user }) => {
                 )}
               />
               <FormField
-                  control={form.control}
-                  name="image"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Add an image</FormLabel>
-                      <FormControl>
-                        <FileUpload
-                          value={field.value}
-                          onChange={field.onChange}
-                          endpoint={'authorizedImage'}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
+                control={form.control}
+                name="image"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Add an image</FormLabel>
+                    <FormControl>
+                      <FileUpload
+                        value={field.value}
+                        onChange={field.onChange}
+                        endpoint={"authorizedImage"}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
               <DialogFooter>
                 <div className="flex items-center space-x-4">
-                        <Button
-                            disabled={isSubmitting}
-                            className="mt-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 dark:bg-blue-400 hover:bg-blue-700 dark:hover:bg-blue-500 focus:outline-none"
-                            type="submit"
-                        >
-                            Post
-                        </Button>
+                  <Button
+                    disabled={isSubmitting}
+                    className="mt-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 dark:bg-blue-400 hover:bg-blue-700 dark:hover:bg-blue-500 focus:outline-none"
+                    type="submit"
+                  >
+                    Post
+                  </Button>
                 </div>
                 <DialogClose asChild>
                   <span ref={ref}></span>
-              </DialogClose>
+                </DialogClose>
               </DialogFooter>
             </form>
           </Form>

@@ -1,9 +1,12 @@
-'use client';
-import { useInfiniteQuery, UseInfiniteQueryResult, InfiniteData } from '@tanstack/react-query';
-import { getHomePosts } from '@/actions/actions';
+"use client";
+import {
+  useInfiniteQuery,
+  UseInfiniteQueryResult,
+  InfiniteData,
+} from "@tanstack/react-query";
+import { getHomePosts } from "@/actions/actions";
 
-
-import { Document, Schema } from 'mongoose';
+import { Document, Schema } from "mongoose";
 
 // Define TypeScript types for the models
 // interface IUser extends Document {
@@ -51,22 +54,19 @@ import { Document, Schema } from 'mongoose';
 //   userId: string;
 // }
 
-  const fetchPostsPage = async ({
-    pageParam,
-    userId,
-  }) => {
-    try {
-        const res = (await getHomePosts(userId, pageParam));
-      return res;
-    } catch (err) {
-      throw new Error(`error fetching home posts: ${err}`);
-    }
-  };
-
-  export default function useHomePosts(userId) {
-    return useInfiniteQuery({
-      queryKey: ['homePosts', userId],
-      queryFn: ({ pageParam }) => fetchPostsPage({ pageParam, userId }),
-      getNextPageParam: (lastPage, allPages) => lastPage.nextCursor ?? undefined,
-    });
+const fetchPostsPage = async ({ pageParam, userId }) => {
+  try {
+    const res = await getHomePosts(userId, pageParam);
+    return res;
+  } catch (err) {
+    throw new Error(`error fetching home posts: ${err}`);
   }
+};
+
+export default function useHomePosts(userId) {
+  return useInfiniteQuery({
+    queryKey: ["homePosts", userId],
+    queryFn: ({ pageParam }) => fetchPostsPage({ pageParam, userId }),
+    getNextPageParam: (lastPage, allPages) => lastPage.nextCursor ?? undefined,
+  });
+}
