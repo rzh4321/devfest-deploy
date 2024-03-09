@@ -30,12 +30,12 @@ export default function Menu() {
       <DropdownMenuContent className="w-56">
         <DropdownMenuItem className="flex items-center gap-4">
           <ProfileDropdown />
-          <span className="text-lg">Profile</span>
+          <span className="text-lg" onClick={(e) => e.stopPropagation()}>Profile</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="flex items-center gap-4">
           <ModeToggle />
-          <span className="text-lg">Toggle</span>
+          <span className="text-lg" onClick={(e) => e.stopPropagation()}>Toggle</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
