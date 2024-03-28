@@ -21,12 +21,12 @@ import { Button } from "@/components/ui/button";
 import { FormError } from "../form-error";
 import { FormSuccess } from "../form-success";
 
-export const LoginForm = () => {
+export const LoginForm = ({visitorUsername}) => {
   const router = useRouter();
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [isPending, startTransition] = useTransition();
+  const [loading, setLoading] = useState(false);
 
   const form = useForm({
     resolver: zodResolver(LoginSchema),
@@ -39,7 +39,8 @@ export const LoginForm = () => {
   const onSubmit = (values) => {
     setError("");
     setSuccess("");
-    startTransition(() => {
+    setLoading(true);
+    
       async function logIn() {
         const res = await signIn("credentials", {
           redirect: false,
@@ -56,8 +57,8 @@ export const LoginForm = () => {
         }
       }
       logIn();
-    });
     if (success) router.push("/all");
+    else setLoading(false);
   };
 
   return (
@@ -65,6 +66,9 @@ export const LoginForm = () => {
       headerLabel="Happening now"
       backButtonLabel="Don't have an account?"
       backButtonHref="/register"
+      loading={loading}
+      setLoading={setLoading}
+      visitorUsername={visitorUsername}
       showSocial
     >
       <Form {...form}>
@@ -77,7 +81,7 @@ export const LoginForm = () => {
                 <FormItem>
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input {...field} disabled={isPending} />
+                    <Input {...field} disabled={loading} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -92,7 +96,7 @@ export const LoginForm = () => {
                   <FormControl>
                     <Input
                       {...field}
-                      disabled={isPending}
+                      disabled={loading}
                       placeholder="******"
                       type="password"
                     />
@@ -104,7 +108,7 @@ export const LoginForm = () => {
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button disabled={isPending} type="submit" className="w-full">
+          <Button disabled={loading} type="submit" className="w-full">
             Login
           </Button>
         </form>

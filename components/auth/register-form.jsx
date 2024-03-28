@@ -24,12 +24,11 @@ import { FormError } from "../form-error";
 import { FormSuccess } from "../form-success";
 import { createUser } from "@/actions/actions";
 
-export const RegisterForm = () => {
+export const RegisterForm = ({visitorUsername}) => {
   const router = useRouter();
 
   const [error, setError] = useState("");
-  const [isPending, startTransition] = useTransition();
-
+  const [loading, setLoading] = useState(false);
   const form = useForm({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -42,8 +41,8 @@ export const RegisterForm = () => {
 
   const onSubmit = (values) => {
     setError("");
+    setLoading(true);
 
-    startTransition(() => {
       async function create() {
         try {
           const userString = await createUser(values);
@@ -56,11 +55,11 @@ export const RegisterForm = () => {
           });
           // router.push('/home');
         } catch (err) {
+          setLoading(false);
             setError('Username already taken');
         }
       }
       create();
-    });
   };
 
   return (
@@ -68,6 +67,9 @@ export const RegisterForm = () => {
       headerLabel="Create an account"
       backButtonLabel="Already have an account?"
       backButtonHref="/"
+      visitorUsername={visitorUsername}
+      loading={loading}
+      setLoading={setLoading}
       showSocial
     >
       <Form {...form}>
@@ -80,7 +82,7 @@ export const RegisterForm = () => {
                 <FormItem>
                   <FormLabel>Name*</FormLabel>
                   <FormControl>
-                    <Input {...field} disabled={isPending} />
+                    <Input {...field} disabled={loading} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -93,7 +95,7 @@ export const RegisterForm = () => {
                 <FormItem>
                   <FormLabel>Username*</FormLabel>
                   <FormControl>
-                    <Input {...field} disabled={isPending} />
+                    <Input {...field} disabled={loading} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -108,7 +110,7 @@ export const RegisterForm = () => {
                   <FormControl>
                     <Input
                       {...field}
-                      disabled={isPending}
+                      disabled={loading}
                       placeholder="******"
                       type="password"
                     />
@@ -136,7 +138,7 @@ export const RegisterForm = () => {
           </div>
           <FormError message={error} />
           {/* <FormSuccess message={success} /> */}
-          <Button disabled={isPending} type="submit" className="w-full">
+          <Button disabled={loading} type="submit" className="w-full">
             Create an account
           </Button>
         </form>
