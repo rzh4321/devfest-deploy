@@ -69,7 +69,7 @@ export default function ProfileSection({ edit, stringData }) {
           />
         </div>
         <div className="flex flex-col justify-center gap-1">
-          <span className="font-bold text-4xl">{userData.name}</span>
+          <span className="font-bold md:text-4xl text-xl">{userData.name}</span>
           <span>@{userData.username}</span>
         </div>
       </div>

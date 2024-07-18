@@ -27,15 +27,13 @@ export default function Menu() {
           <HamburgerMenuIcon />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
-        <DropdownMenuItem className="flex items-center gap-4">
+      <DropdownMenuContent className='w-40'>
+        <DropdownMenuItem>
           <ProfileDropdown />
-          <span className="text-lg" onClick={(e) => e.stopPropagation()}>Profile</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="flex items-center gap-4">
+        <DropdownMenuItem>
           <ModeToggle />
-          <span className="text-lg" onClick={(e) => e.stopPropagation()}>Toggle</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -24,18 +24,21 @@ const ProfileDropdown = ({ profilePicUrl }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="circle" className="relative h-10 w-10">
-          <Image
-            className="rounded-full"
-            src={
-              profilePicUrl
-                ? profilePicUrl
-                : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzykHG9uAxSMQWR-w0PL11LVzi2WD9IcXruJNMu0WMWQ&s"
-            }
-            alt="image"
-            fill
-          />
-        </Button>
+        <div className="flex gap-3 items-center">
+          <Button variant="outline" size="circle" className="relative h-10 w-10">
+            <Image
+              className="rounded-full"
+              src={
+                profilePicUrl
+                  ? profilePicUrl
+                  : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzykHG9uAxSMQWR-w0PL11LVzi2WD9IcXruJNMu0WMWQ&s"
+              }
+              alt="image"
+              fill
+            />
+          </Button>
+          <span className="text-lg md:hidden">Profile</span>
+        </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-44">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
